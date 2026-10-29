@@ -1,0 +1,857 @@
+@import "tailwindcss";
+
+:root {
+  --ns-bg-void: #07070a;
+  --ns-bg-0: #0b0b10;
+  --ns-bg-1: #14141b;
+  --ns-bg-2: #1c1c26;
+  --ns-card: #181820;
+  --ns-card-hover: #20202c;
+  --ns-line: #2a2a38;
+  --ns-line-bright: #3d3d5c;
+
+  --ns-text: #f2f2f7;
+  --ns-muted: #9a9ab0;
+  /* spec token was #5C5C70 — lifted for legibility of 11–12px meta text on #181820 */
+  --ns-faint: #8585a0;
+
+  --ns-north: #8b7cf6;
+  --ns-north-glow: rgba(139, 124, 246, 0.35);
+
+  --ns-lit: #ffc978;
+  --ns-linked: #4fd1c5;
+  --ns-ok: #6ee7a8;
+  --ns-warn: #f4b56a;
+  --ns-gap: rgba(226, 109, 109, 0.55);
+
+  --ns-focus: #8b7cf6;
+  --ns-craft: #06b6d4;
+  --ns-deen: #f59e0b;
+  --ns-health: #6ee7a8;
+  --ns-family: #f59e7a;
+  --ns-admin: #94a3b8;
+  --ns-leisure: #f472b6;
+
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --display: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  min-height: 100%;
+  background: var(--ns-bg-void);
+}
+
+body,
+#root {
+  min-height: 100%;
+  background: transparent;
+}
+
+body {
+  font-family: var(--sans);
+  color: var(--ns-text);
+  font-size: 15px;
+  line-height: 1.55;
+  overscroll-behavior-y: none;
+}
+
+::selection {
+  background: var(--ns-north-glow);
+  color: #fff;
+}
+
+/* ---------- console primitives ---------- */
+
+/* Modern display face. Space Grotesk is mechanical, current and reads as an
+   instrument label rather than an editorial headline. */
+.plate {
+  font-family: var(--display);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+  font-feature-settings: "ss01" 1, "cv01" 1;
+  text-wrap: balance;
+}
+
+:root:not([data-motion="off"]) .speak {
+  animation: speak 200ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes speak {
+  from {
+    opacity: 0.25;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* The product wordmark: tighter, heavier, instrument-grade. */
+.wordmark {
+  font-family: var(--display);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ns-muted);
+}
+
+.rule {
+  border-top: 1px solid var(--ns-line);
+}
+
+.bay {
+  background: var(--ns-card);
+  border: 1px solid var(--ns-line);
+  border-radius: 16px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.028);
+}
+
+.bay-hover:hover {
+  background: var(--ns-card-hover);
+  border-color: var(--ns-line-bright);
+}
+
+.mono {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.muted {
+  color: var(--ns-muted);
+}
+.faint {
+  color: var(--ns-faint);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+input,
+textarea,
+select {
+  background: var(--ns-bg-1);
+  border: 1px solid var(--ns-line);
+  border-radius: 10px;
+  padding: 8px 10px;
+  width: 100%;
+  outline: none;
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+button:focus-visible,
+a:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--ns-north);
+  outline-offset: 2px;
+}
+
+textarea {
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 12px;
+  padding: 9px 16px;
+  font-family: var(--display);
+  letter-spacing: -0.01em;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid var(--ns-line-bright);
+  background: var(--ns-bg-2);
+  color: var(--ns-text);
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease, transform 140ms ease,
+    opacity 140ms ease;
+}
+.btn:hover {
+  background: var(--ns-card-hover);
+  border-color: var(--ns-north);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--ns-north);
+  border-color: var(--ns-north);
+  color: #0b0b10;
+  font-weight: 600;
+}
+.btn-primary:hover {
+  background: #9d90f9;
+  border-color: #9d90f9;
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: var(--ns-line);
+  color: var(--ns-muted);
+}
+.btn-ghost:hover {
+  color: var(--ns-text);
+  background: var(--ns-bg-1);
+}
+
+.btn-sm {
+  padding: 5px 11px;
+  font-size: 13px;
+  border-radius: 10px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  border: 1px solid var(--ns-line);
+  background: var(--ns-bg-1);
+  color: var(--ns-muted);
+  font-family: var(--display);
+  letter-spacing: -0.005em;
+  font-size: 12px;
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: border-color 140ms ease, color 140ms ease, background 140ms ease;
+}
+.chip:hover {
+  border-color: var(--ns-line-bright);
+  color: var(--ns-text);
+}
+.chip[data-on="true"] {
+  border-color: var(--ns-north);
+  color: var(--ns-text);
+  background: rgba(139, 124, 246, 0.12);
+}
+
+.hairline {
+  height: 1px;
+  background: linear-gradient(to right, var(--ns-line-bright), transparent);
+}
+
+/* ---------- starfield ---------- */
+
+.star-ignite {
+  animation: ignite 550ms cubic-bezier(0.2, 0.9, 0.25, 1) both;
+}
+@keyframes ignite {
+  0% {
+    transform: scale(0.4);
+    opacity: 0.3;
+  }
+  55% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.pulse-ring {
+  animation: pulsering 2600ms ease-in-out infinite;
+}
+@keyframes pulsering {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+.seal {
+  animation: seal 620ms ease-out both;
+}
+@keyframes seal {
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
+    box-shadow: 0 0 0 0 var(--ns-north-glow);
+  }
+  60% {
+    transform: scale(1.06);
+    opacity: 1;
+    box-shadow: 0 0 0 12px rgba(139, 124, 246, 0);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(139, 124, 246, 0);
+  }
+}
+
+.panel-in {
+  animation: panelin 220ms cubic-bezier(0.2, 0.9, 0.25, 1) both;
+}
+@keyframes panelin {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.sheet-in {
+  animation: sheetin 220ms cubic-bezier(0.2, 0.9, 0.25, 1) both;
+}
+@keyframes sheetin {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.fade-in {
+  animation: fadein 180ms ease-out both;
+}
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.clamp3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.scroll-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: var(--ns-line);
+  border-radius: 8px;
+}
+.scroll-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+details > summary {
+  list-style: none;
+  cursor: pointer;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* ============================================================
+   MOTION LAYER — keyed off data-motion on <html>.
+   Transform/opacity only. Never implies meaning the data lacks.
+   ============================================================ */
+
+/* Off: instant state changes, 100ms opacity only */
+:root[data-motion="off"] *,
+:root[data-motion="off"] *::before,
+:root[data-motion="off"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 100ms !important;
+  transition-property: opacity, color, border-color, background-color !important;
+}
+:root[data-motion="off"] .star-ignite,
+:root[data-motion="off"] .pulse-ring {
+  animation: none !important;
+}
+
+/* Hidden tab: pause every running animation (ambient included) */
+:root[data-hidden="true"] * {
+  animation-play-state: paused !important;
+}
+
+/* Press feedback — pointer down only; hover lift gated to real hover devices */
+:root:not([data-motion="off"]) .btn:active,
+:root:not([data-motion="off"]) .chip:active {
+  transform: scale(0.97);
+}
+@media (hover: hover) {
+  :root:not([data-motion="off"]) .bay-hover:hover {
+    transform: translateY(-1px);
+  }
+  .bay-hover {
+    transition: transform 200ms cubic-bezier(0.2, 0.8, 0.2, 1), background 140ms ease,
+      border-color 140ms ease;
+  }
+}
+
+/* Route change: fade + 8px rise; children stagger via --i (capped at 8 upstream) */
+.page-in {
+  animation: pagein 200ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes pagein {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+:root:not([data-motion="off"]) .stagger > * {
+  animation: pagein 200ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: calc(min(var(--i, 0), 8) * 40ms);
+}
+
+/* Day strip draw-in: left-to-right, 12ms per star, capped upstream */
+:root:not([data-motion="off"]) .strip-in > * {
+  animation: starin 200ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * 12ms);
+}
+@keyframes starin {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Ignition ripple — once, around a newly lit star */
+.ripple::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 999px;
+  border: 1px solid var(--ns-lit);
+  opacity: 0;
+  pointer-events: none;
+}
+:root:not([data-motion="off"]) .ripple::after {
+  animation: ripple 600ms cubic-bezier(0.2, 0.8, 0.2, 1) 1;
+}
+@keyframes ripple {
+  0% {
+    transform: scale(0.5);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Heatmap diagonal wave + growing bars (transform-only: scaleY from origin bottom) */
+:root:not([data-motion="off"]) .wave > * {
+  animation: cellin 300ms ease-out both;
+  animation-delay: calc(var(--w, 0) * 14ms);
+}
+@keyframes cellin {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+:root:not([data-motion="off"]) .grow-y > * {
+  transform-origin: bottom;
+  animation: growy 400ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes growy {
+  from {
+    transform: scaleY(0.05);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+:root:not([data-motion="off"]) .grow-x {
+  transform-origin: left;
+  animation: growx 400ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes growx {
+  from {
+    transform: scaleX(0.05);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Expand/collapse without layout animation: grid-template-rows 0fr→1fr */
+.rows {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.rows[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+.rows > * {
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Timer ring: gold shift handled by stroke color upstream; dashoffset transition here */
+.ring-fg {
+  transition: stroke-dashoffset 1000ms linear, stroke 600ms ease;
+}
+:root[data-motion="off"] .ring-fg {
+  transition: none;
+}
+
+/* Start-card glow companion to the tab-title flash (Calm/Full only, ≤30s upstream) */
+:root:not([data-motion="off"]) .invite-glow {
+  animation: inviteglow 2.4s ease-in-out infinite;
+}
+@keyframes inviteglow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(139, 124, 246, 0);
+  }
+  50% {
+    box-shadow: 0 0 24px 0 rgba(139, 124, 246, 0.35);
+  }
+}
+:root[data-motion="off"] .invite-glow {
+  border-color: var(--ns-north) !important;
+}
+
+/* Review seal dim */
+.sealed-strip {
+  transition: opacity 600ms ease;
+  opacity: 0.6;
+}
+
+/* ============================================================
+   ADD-ONS — Full level only unless stated; each behind a toggle
+   ============================================================ */
+
+/* A. Atmosphere: slow 2-layer gradient drift, CSS only, pauses when hidden */
+:root[data-motion="full"][data-atmo="true"] .atmo::before,
+:root[data-motion="full"][data-atmo="true"] .atmo::after {
+  content: "";
+  position: fixed;
+  inset: -20%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+  will-change: transform;
+}
+:root[data-motion="full"][data-atmo="true"] .atmo::before {
+  background: radial-gradient(40% 30% at 30% 20%, rgba(139, 124, 246, 0.07), transparent 70%);
+  animation: drift 60s ease-in-out infinite alternate;
+}
+:root[data-motion="full"][data-atmo="true"] .atmo::after {
+  background: radial-gradient(35% 30% at 70% 80%, rgba(79, 209, 197, 0.05), transparent 70%);
+  animation: drift 60s ease-in-out infinite alternate-reverse;
+}
+@keyframes drift {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(4%, 3%);
+  }
+}
+
+/* B. Sky tint by time of day — variables set upstream hourly, 2s crossfade; Calm allowed */
+body {
+  transition: background-color 2s ease;
+}
+
+/* C. Twinkle: max 40 faint stars, CSS only, no per-frame JS */
+.twinkle-star {
+  position: fixed;
+  width: 2px;
+  height: 2px;
+  border-radius: 99px;
+  background: var(--ns-text);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.1;
+}
+:root[data-motion="full"][data-twinkle="true"] .twinkle-star {
+  animation: twinkle 4s ease-in-out infinite;
+  animation-delay: var(--td, 0s);
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.06;
+  }
+  50% {
+    opacity: 0.28;
+  }
+}
+:root:not([data-motion="full"]) .twinkle-star,
+:root:not([data-twinkle="true"]) .twinkle-star {
+  display: none;
+}
+
+/* ============================================================
+   VIGIL — the overseer. A small animated instrument presence.
+   Infinite motion is scoped to Calm/Full, paused when hidden,
+   and fully still at Off or OS reduced-motion.
+   ============================================================ */
+
+.vigil {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  color: var(--ns-linked);
+}
+.vigil svg {
+  overflow: visible;
+  display: block;
+}
+.vigil .v-orbit,
+.vigil .v-float,
+.vigil .v-eyes,
+.vigil .v-scan,
+.vigil .v-beacon,
+.vigil .v-core,
+.vigil .v-bars > rect {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.vigil .v-orbit {
+  transform-origin: 32px 32px;
+}
+:root:not([data-motion="off"]) .vigil .v-float {
+  animation: vfloat 6.5s ease-in-out infinite;
+}
+:root:not([data-motion="off"]) .vigil .v-orbit {
+  animation: vspin 26s linear infinite;
+}
+:root:not([data-motion="off"]) .vigil .v-eyes {
+  animation: vblink 6.4s steps(1, end) infinite;
+}
+:root:not([data-motion="off"]) .vigil .v-scan {
+  animation: vscan 5.2s ease-in-out infinite;
+}
+:root:not([data-motion="off"]) .vigil .v-beacon {
+  animation: vbeacon 2.8s ease-in-out infinite;
+}
+:root:not([data-motion="off"]) .vigil .v-core {
+  animation: vcore 4s ease-in-out infinite;
+}
+:root:not([data-motion="off"]) .vigil .v-bars > rect {
+  animation: vbars 1.6s ease-in-out infinite;
+}
+:root:not([data-motion="off"]) .vigil .v-bars > rect:nth-child(2) {
+  animation-delay: 0.18s;
+}
+:root:not([data-motion="off"]) .vigil .v-bars > rect:nth-child(3) {
+  animation-delay: 0.36s;
+}
+/* Calm: the ambient float and the slow orbit stay still. */
+:root[data-motion="calm"] .vigil .v-float,
+:root[data-motion="calm"] .vigil .v-orbit,
+:root[data-motion="calm"] .vigil .v-scan {
+  animation: none;
+}
+:root[data-motion="calm"] .vigil .v-eyes {
+  animation-duration: 9s;
+}
+.vigil[data-mood="dormant"] .v-eyes {
+  opacity: 0.35;
+  animation: none;
+}
+.vigil[data-mood="dormant"] .v-bars,
+.vigil[data-mood="dormant"] .v-scan {
+  opacity: 0.2;
+}
+.vigil[data-mood="focused"] .v-eyes {
+  fill: var(--ns-lit);
+}
+.vigil[data-mood="alert"] .v-eyes {
+  fill: var(--ns-warn);
+}
+.vigil[data-mood="scanning"] .v-eyes {
+  fill: var(--ns-north);
+}
+.vigil[data-mood="dormant"] .v-eyes {
+  fill: var(--ns-faint);
+}
+
+@keyframes vfloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+@keyframes vspin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes vblink {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  94%,
+  96% {
+    transform: scaleY(0.1);
+  }
+}
+@keyframes vscan {
+  0%,
+  100% {
+    transform: translateX(-4px);
+    opacity: 0.15;
+  }
+  50% {
+    transform: translateX(18px);
+    opacity: 0.85;
+  }
+}
+@keyframes vbeacon {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes vcore {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.06);
+  }
+}
+@keyframes vbars {
+  0%,
+  100% {
+    transform: scaleY(0.4);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+/* live status dot used by the rail + dock */
+.live-dot {
+  position: relative;
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 99px;
+  background: var(--ns-ok);
+}
+:root:not([data-motion="off"]) .live-dot::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 99px;
+  border: 1px solid var(--ns-ok);
+  animation: livedot 2.6s ease-out infinite;
+}
+@keyframes livedot {
+  0% {
+    transform: scale(0.5);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+/* overseer console portraits */
+.overseer-stage {
+  position: relative;
+  border-radius: 16px;
+  border: 1px solid var(--ns-line-bright);
+  background:
+    radial-gradient(90% 70% at 50% 0%, rgba(139, 124, 246, 0.13), transparent 70%),
+    var(--ns-bg-1);
+  overflow: hidden;
+}
+.overseer-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(70% 80% at 50% 50%, #000, transparent 78%);
+  pointer-events: none;
+}
+
+/* Safe areas for future mobile use */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .safe-bottom {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 8px);
+  }
+}
+
+/* OS-level reduced motion always wins, even over Full */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .star-ignite,
+  .pulse-ring,
+  .invite-glow {
+    animation: none !important;
+  }
+}
